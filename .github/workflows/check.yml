@@ -54,4 +54,5 @@ jobs:
         run: kinenix run extract-artbook
       - name: rpa-challenge on the website
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: kinenix run rpa-challenge --vars '{"config": {"headless": true}}'
+        run: |
+          kinenix run rpa-challenge --vars '{"config": {"headless": true}}'
