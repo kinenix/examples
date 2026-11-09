@@ -1,0 +1,9 @@
+{
+  "url": "tests/pages/index.html",
+  "category": "Art",
+  "min_ratings": ["Three", "Four", "Five"],
+  "max_pages": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "output_csv": "output/Artbook.csv",
+  "headless": true,
+  "redact": []
+}

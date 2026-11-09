@@ -1,0 +1,57 @@
+name: Check examples
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * 1"   # every Monday, to see when a website has changed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate every example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.12"
+      - name: Install Kinenix
+        run: pip install --pre kinenix
+      - name: Validate
+        run: |
+          status=0
+          for flow in */flow.md; do
+            kinenix validate "$(dirname "$flow")" || status=1
+          done
+          exit $status
+
+  run:
+    name: Run the examples
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.12"
+      - name: Install Kinenix and the browser
+        run: |
+          pip install --pre kinenix
+          python -m playwright install --with-deps chromium
+      - name: extract-artbook on the saved pages
+        run: kinenix run extract-artbook --config config/test.json
+      - name: extract-artbook on the website
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: kinenix run extract-artbook
+      - name: rpa-challenge on the website
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: kinenix run rpa-challenge --vars '{"config": {"headless": true}}'

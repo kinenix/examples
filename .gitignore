@@ -1,0 +1,7 @@
+# Results and secrets stay on the machine that runs an example
+output/
+logs/
+.env
+__pycache__/
+# Written by Kinenix 0.2.0b3 and older; flows are flow.md files
+flow.json

@@ -1,0 +1,8 @@
+{
+  "website": "https://rpachallenge.com/",
+  "excel_url": "https://rpachallenge.com/assets/downloadFiles/challenge.xlsx",
+  "excel_path": "./output/challenge.xlsx",
+  "screenshot_path": "./output/screenshots/result_rpachallenge.png",
+  "error_dir": "./output/errors/",
+  "headless": false
+}
